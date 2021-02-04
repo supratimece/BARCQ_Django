@@ -1,0 +1,242 @@
+<!-- <html>
+<head>
+	<style type="text/css">
+	</style>
+    <header>
+        <title> BARCQ </title>
+    </header>
+<link rel="stylesheet" href="../../../static/css/tabstyle.css"> 
+<link rel="stylesheet" href="../../../static/css/grid.css">
+<link rel="stylesheet" href="../../../static/css/popup.css">
+
+	<script src = "../../../static/jsonschemas/allowedUserDefinedGate.json"></script>
+	<script src = "../../../static/jsonschemas/gatesUIExtended.json"></script>
+	<script src = '../../../static/js/jquery.js'> </script>
+    <script src = '../../../static/js/jquery-ui.js'> </script>
+    <script src="../../../static/js/createdropzone.js"></script>
+    <script src = "../../../static/js/globalvars.js"></script>
+    <script src = "../../../static/js/toolbox_v2.js"></script>
+    <script src = "../../../static/js/cloneanddrag_v2.js"></script>
+    <script src = "../../../static/js/selectanddelete.js"></script>
+    <script src = "../../../static/js/mergeandunmerge.js"></script>
+    <script src = "../../../static/js/gridtojson.js"></script>
+    <script src = "../../../static/js/core.js"></script>
+    <script src = "../../../static/js/loadjson.js"></script>
+    <script src = "../../../static/js/d3.v3.min.js"></script>
+    <script src = "../../../static/js/gridinputlines.js"></script>
+    <script src = "../../../static/js/redesigngrid.js"></script>
+    <script src = "../../../static/js/gatessymbol.js"></script>
+    <script src = "../../../static/js/userdefinedcontrolgates.js"></script>
+	<script src = "../../../static/js/checkdiv.js"></script>
+	<script src="../../../static/js/tabbedInterface.js"></script>
+	<script src="../../../static/js/plotly-latest.min.js"></script> -->
+	   <!--  <script>
+	    $(document).ready(function(){
+	    	CreateToolBox();
+	    	CreateDropzone();
+	    	//MakeCloneAble();
+	    	//AttachSelectAndDelete();
+			 AttachDraggableEvents();
+             AttachDroppableEvents();
+             console.log("************* Executing Core TEst *************");
+	    	CoreTest();
+	    	console.log("******************************************");
+	    	$("#mergebutton").click(function(){
+        	    GridToJson();
+ 			});
+ 			/*$("#loadbutton").click(function(){
+        	    LoadJson();
+ 			});*/
+ 			AddInputLinesToGrid();
+ 			InsertConnectorOnGrid();
+ 			ControlGateInitialization();
+ 			$("#create").click(function(){
+ 				StoreDivIds();	
+ 			});
+ 			
+ 			//----------------------------------
+ 			$(".trigger_popup_fricc").click(function(){
+				$('.hover_bkgr_fricc').show();
+			});
+			
+			/*$('.hover_bkgr_fricc').click(function(){
+				//  $('.hover_bkgr_fricc').hide();
+			});
+			$('.popupCloseButton').click(function(){
+					$('.hover_bkgr_fricc').hide();
+			});
+			$('.popupSetButton').click(function(){
+				//Set the required variable and hide
+				ctl_bits_array=$("#ctl_bits_field").val().split(",");
+				unitaryControlRowIds=ctl_bits_array;
+				//alert("Length of ctl array : "+ctl_bits_array.length )
+				tgt_bits_array=$("#tgt_bits_field").val().split(",");
+				unitaryTargetRowIds=tgt_bits_array;
+				//alert("Length of tgt array : "+tgt_bits_array.length )
+				//alert("Num_bits : "+(ctl_bits_array.length+tgt_bits_array.length))
+				$('.hover_bkgr_fricc').hide();
+				UpdateGenericControlGate();
+			});*/
+
+			$('.hover_bkgr_fricc').click(function(){
+                //  $('.hover_bkgr_fricc').hide();
+            });
+            $('.popupCloseButton').click(function(){
+                    $('.hover_bkgr_fricc').hide();
+            });
+            //$('.popupSetButton').click(function(){
+            $('#gateSetButton').click(function(){
+                //Set the required variable and hide
+                ctl_bits_array=$("#ctl_bits_field").val().split(",");
+                unitaryControlRowIds=ctl_bits_array;
+                //alert("Length of ctl array : "+ctl_bits_array.length )
+                tgt_bits_array=$("#tgt_bits_field").val().split(",");
+                unitaryTargetRowIds=tgt_bits_array;
+                //alert("Length of tgt array : "+tgt_bits_array.length )
+                //alert("Num_bits : "+(ctl_bits_array.length+tgt_bits_array.length))
+                $('.hover_bkgr_fricc').hide();
+                //UpdateGenericControlGate(obj);
+                UpdateGenericControlGate();
+            });
+            
+            $('#phaseSetButton').click(function(){
+					gateObj.attr("arg_value",$("#phase_field").val());
+					$('.hover_bkgr_fricc').hide();
+					ModifyParentDiv(gateObj.parent());
+					GenerateCode();
+			});
+            
+			//-----------------------------------------
+
+ 			//Trying to call server side function written in cherryPy
+ 			$("#submitButton").click(function(e){
+                        $.post("/CodeGenerator",{"jsonObj" : JSON.stringify(circuitJsonObj)},function(data) {
+                			console.log("Reverse function calle........");
+                			data=JSON.parse(data);
+                			console.log("---- Printing returned JSON ----")
+                			console.log(data);
+                            //$("#title").html(data["title"]) ;
+                            console.log("Plot X : "+data["xdata"])
+                            console.log("Plot Y : "+data["ydata"])
+                            $("#title").html(data["ydata"]) ;
+                            //xdata=data["xdata"];
+                            xStringData=[]
+                            for(var index=0;index<data["xdata"].length;index++){
+
+                            	xStringData.push(data["xdata"][index]+"t");
+
+                            }
+
+                            sumData[0]["x"]=xStringData; //data["xdata"].toString();
+                            sumData[0]["y"]=data["ydata"];
+               	})
+                 .done(function() {
+               		console.log("Server side function called........");
+            	});
+           	e.preventDefault();
+
+            /*
+			//This also works, keeping it just for the future reference
+            var request = $.ajax({'url': '/CodeGenerator'});
+           	request.done(function(response) {
+		        //$('#foo').text(response.foo);
+		        //$('#baz').text(response.baz);
+		        console.log("Data Received : "+response);
+		        $("#title").html(response);
+		      });*/
+
+            });
+
+ 			
+		});
+	</script>
+</head> -->
+
+<!-- <body id="body"> -->
+
+
+	<!-- Trying to create tabbed interface 	-->
+	<!-- <h2>Welcome to BARCQ</h2> -->
+	<!-- <p>Click on the buttons inside the tabbed menu:</p> -->
+	
+
+	<div class="tab">
+  		<button class="tablinks" onclick="openCity(event, 'circuitComposer')" id="defaultOpen">Circuit Editor</button>
+  		<!-- <button class="tablinks" onclick="openCity(event, 'qutipCode')">QuTiP code</button> -->
+  		<button class="tablinks" onclick="openCity(event, 'results')">Results</button>
+  	</div>
+
+	<div id="circuitComposer" class="tabcontent">
+	<table>
+		<tr> 
+			<td>
+				<div id="toolboxDivSingle" class="toolbox"></div>
+			</td>
+			<td>
+				<div id="toolboxDivMultiple" class="toolbox"></div>
+			</td>
+			<td style="vertical-align: top;">
+			<div id="parentForOverlappingDiv">
+				<div id="linesDiv" class="box"></div>
+				<div id="svgDropDiv" class="box stack-top" >
+					<svg xmlns="http://www.w3.org/2000/svg" id="testSvg" width=100% height=100%>
+						<g id="testGroup">
+  							<foreignObject x="0" y="0" width=100% height=100% >
+								<div id="dropzoneDiv" width=100% height=100% ></div>
+							</foreignObject>
+						</g>
+					</svg>
+				</div>
+				
+			</div>
+			</td>
+		</tr>
+	</table>
+	
+	 <!-- <button type="button" id="mergebutton">Export JSON</button> -->
+<!--    <input type="file" id="fileLoader" style="display: none" />
+		<button type="button" id="loadbutton" onclick="loadFile()">Load Circuit</button> -->
+    <!-- <button type="button" id="savefile">Save Circuit</button> -->
+	<button type="button" id="create">New Controlled Gate</button>
+	<button type="button" id="display">Create Gate</button>
+	<!-- <button type="button" id="submitButton">Submit</button> -->
+	<!-- <button type="button" id="saveDatabase">SaveinDatabase</button> -->
+	<!-- <button onclick="window.print()">PrintThisPage</button> -->
+
+	<h5 id = "title"></h5>
+
+</div>
+
+<!-- <div id="qutipCode" class="tabcontent monospace"></div> -->
+
+<div id="results"  class="tabcontent">
+<!-- For each new plot, just add a div below -->
+	<div id="plotHist"></div>
+	<div id="countPlot"></div>
+	<div id="sumPlot" style="margin-right: 300px"></div>
+</div>
+	
+<div class="hover_bkgr_fricc" id="gatePopup">
+    <span class="helper"></span>
+    <div>
+        <div class="popupCloseButton">&times;</div>
+        <!-- <p>Add any HTML content<br />inside the popup box!</p> -->
+        <!-- Num of bits <input type="text" size="5"/><br/> -->
+        <label id="ctl_label">Control bits</label> <input type="text" size="5" placeholder="1,2,3" bits id="ctl_bits_field"/><br/>
+        <label id="tgt_label">Target bits</label> <input type="text" size="5" placeholder="1,2" bits  id="tgt_bits_field"/><br/>
+        <div class="popupSetButton" id="gateSetButton">&#10004;</div>
+    </div>
+</div>
+
+<div class="hover_bkgr_fricc"  id="phasePopup">
+    <span class="helper"></span>
+    <div>
+        <div class="popupCloseButton">&times;</div>
+        Theta <input type="text" size="5" placeholder="3.14159" bits id="phase_field"/><br/>
+        <div class="popupSetButton" id="phaseSetButton">&#10004;</div>
+    </div>
+</div>
+
+<!-- </body>
+
+</html> -->
